@@ -1,5 +1,6 @@
 from  note import MyNote
-from datetime import date,time
+from datetime import date
+import time
 hellostring="""
 1 загрузить из файла
 2 сохранить в файл
@@ -15,7 +16,10 @@ def add_note(db):
     id = len(db)+1
     title = input("Введите заголовок")
     mynote = input("Введите тело заметки")
-    db.append(MyNote(id,title,mynote,date.today(),time()))
+    sec = time.time()
+    struct = time.localtime(sec)
+    stime=time.strftime('%H:%M:%S', struct)
+    db.append(MyNote(id,title,mynote,date.today(),stime))
 
 def save(db):
     print("файл сохранен")
@@ -65,6 +69,7 @@ if __name__ == '__main__':
                         flag_need_save = False
                     elif numbercomand == 3:
                         add_note(db)
+                        print(db[0].time)
                         file_need_save = True
                         pass
                     elif(numbercomand==4):
