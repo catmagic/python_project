@@ -1,3 +1,5 @@
+from  note import MyNote
+from datetime import date,time
 hellostring="""
 1 загрузить из файла
 2 сохранить в файл
@@ -10,10 +12,13 @@ hellostring="""
 введите номер команды:
 """
 def add_note(db):
-    db.append(db.id+1,title="123")
+    id = len(db)+1
+    title = input("Введите заголовок")
+    mynote = input("Введите тело заметки")
+    db.append(MyNote(id,title,mynote,date.today(),time()))
 
 def save(db):
-	print("файл сохранен")
+    print("файл сохранен")
     pass
 
 def need_save(flag_need_save,db,string):
@@ -39,31 +44,31 @@ def is_number_int(s):
     except ValueError:
         return False
 if __name__ == '__main__':
+    db = []
     while 1 :
         print(hellostring)
-        flag_correct_numercomand=False
-        flag_exit=False
-        flag_need_save=False
-        db=[{id:0,title:""}]
-        while flag_correct_numercomand==False:
-            numbercomand=input()
+        flag_correct_numercomand = False
+        flag_exit = False
+        flag_need_save = False
+        while flag_correct_numercomand == False:
+            numbercomand = input()
             if is_number_int(numbercomand):
-                numbercomand=int(numbercomand)
-                if  0<numbercomand and numbercomand < 9:
+                numbercomand = int(numbercomand)
+                if  0 < numbercomand and numbercomand < 9:
                     flag_correct_numercomand=True
-                    if(numbercomand ==1):#команда загрузить
+                    if numbercomand == 1: #команда загрузить
                         need_save(flag_need_save, db, "Вы хотите загрузить файл,но у вас есть не сохранные изменения.\nсохранить?\n1 да\n2 нет")
-                        flag_need_save=False
+                        flag_need_save = False
                         pass
-                    elif( numbercomand == 2):
+                    elif numbercomand == 2:
                         save(db)
-                        flag_need_save=False
-                    elif(numbercomand==3):
-                    	add_note(db)
-                    	file_need_save=True
+                        flag_need_save = False
+                    elif numbercomand == 3:
+                        add_note(db)
+                        file_need_save = True
                         pass
                     elif(numbercomand==4):
-                    	file_need_save=True
+                        file_need_save = True
                         pass
                     elif(numbercomand==5):
                         pass
@@ -81,5 +86,5 @@ if __name__ == '__main__':
             if flag_correct_numercomand==False:
                 print("введите номер командыы заново")
         if flag_exit == True:
-        	need_save(flag_need_save,db,"Вы хотите выйти, но у вас есть не сохранные изменения.\nсохранить?\n1 да\n2 нет")
+            need_save(flag_need_save,db,"Вы хотите выйти, но у вас есть не сохранные изменения.\nсохранить?\n1 да\n2 нет")
             break
