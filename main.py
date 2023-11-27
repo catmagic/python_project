@@ -9,9 +9,13 @@ hellostring="""
 8 выйти из программы
 введите номер команды:
 """
+def add_note(db):
+    db.append(db.id+1,title="123")
+
 def save(db):
 	print("файл сохранен")
     pass
+
 def need_save(flag_need_save,db,string):
     while flag_need_save:
         print(string)
@@ -40,7 +44,7 @@ if __name__ == '__main__':
         flag_correct_numercomand=False
         flag_exit=False
         flag_need_save=False
-        db=[]
+        db=[{id:0,title:""}]
         while flag_correct_numercomand==False:
             numbercomand=input()
             if is_number_int(numbercomand):
@@ -55,6 +59,7 @@ if __name__ == '__main__':
                         save(db)
                         flag_need_save=False
                     elif(numbercomand==3):
+                    	add_note(db)
                     	file_need_save=True
                         pass
                     elif(numbercomand==4):
