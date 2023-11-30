@@ -15,6 +15,7 @@ hellostring="""
 9 выйти из программы
 введите номер команды:
 """
+
 def add_note(db):
     id = len(db)+1
     title = input("Введите заголовок")
@@ -29,7 +30,7 @@ def save(db):
     f = open(namefile, "w")
     f.write(json.dumps(db, cls=MyNoteEncoder))
     f.close()
-def load(db):
+def load(db,flag_need_save):
     namefile = input("введите имя файла")
     s = ""
     try:
@@ -38,6 +39,7 @@ def load(db):
             s += line
         f.close()
         db = json.loads(s)
+        flag_need_save = False
     except IOError:
         print("нет файла. выход из загрузки файла.")
 
@@ -63,6 +65,59 @@ def is_number_int(s):
         return True
     except ValueError:
         return False
+
+def edits(flag_need_save,db):
+    while len(db):
+        s = input("введите айди")
+        if is_number_int(s):
+            flag_exit_mynote = False
+            index = 0
+            for i in range(len(db)):
+                if(db[i]["id"] == int(s)):
+                    flag_exit_mynote = True
+                    index = i
+                    break
+            if(flag_exit_mynote):
+                db[index]["title"] = input("Введите заголовок")
+                db[index]["mynote"] = input("Введите тело заметки")
+                sec = time.time()
+                struct = time.localtime(sec)
+                db[index]["time"] = time.strftime('%H:%M:%S', struct)
+                db[index]["date"] = date.today().strftime("%d/%m/%Y")
+                break
+            else:
+                print("с таким айди записи нет")
+        else:
+            print("айди это число")
+    if(len(db)):
+        flag_need_save = True
+    else:
+        print("база заметок пуста пуста")
+
+
+
+def findid(db):
+    while len(db)
+        s = input("введите айди")
+        if is_number_int(s):
+            flag_exit_mynote = False
+            index = 0
+            for i in range(len(db)):
+                if (db[i]["id"] == int(s)):
+                    flag_exit_mynote = True
+                    index = i
+                    break
+            if (flag_exit_mynote):
+                print(str(db[index]["id"]) + ":" + db[index]["title"]+"\n"+db[index]["title"])
+                break
+            else:
+                print("с таким айди записи нет")
+
+        else:
+            print("айди это число")
+    if (len(db) == 0):
+        print("база заметок пуста пуста")
+
 if __name__ == '__main__':
     db = []
     while 1 :
@@ -78,8 +133,7 @@ if __name__ == '__main__':
                     flag_correct_numercomand=True
                     if numbercomand == 1: #команда загрузить
                         need_save(flag_need_save, db, "Вы хотите загрузить файл,но у вас есть не сохранные изменения.\nсохранить?\n1 да\n2 нет")
-                        load(db)
-                        flag_need_save = False
+                        load(db,flag_need_save)
                     elif numbercomand == 2:
                         save(db)
                         flag_need_save = False
@@ -88,12 +142,11 @@ if __name__ == '__main__':
                         file_need_save = True
                         pass
                     elif numbercomand == 4:
-                        file_need_save = True
-                        pass
+                        edits(file_need_save, db)
                     elif numbercomand == 5:
-                        pass
+                         finddate(db)
                     elif numbercomand == 6:
-                        pass
+                        findid(db)
                     elif numbercomand == 7:
                         file_need_save = True
                         pass
