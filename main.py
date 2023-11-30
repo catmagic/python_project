@@ -1,7 +1,7 @@
 import json
 
 from  note import *
-from datetime import date
+from datetime import date, datetime
 import time
 hellostring="""
 1 загрузить из файла
@@ -19,20 +19,20 @@ hellostring="""
 def add_note(db):
     maxid = max(db, key=lambda mynote : mynote.id, default=MyNote(0,1,1,1,1)).id
     id = maxid+1
-    title = input("Введите заголовок")
-    mynote = input("Введите тело заметки")
+    title = input("Введите заголовок\n")
+    mynote = input("Введите тело заметки\n")
     sec = time.time()
     struct = time.localtime(sec)
     stime = time.strftime('%H:%M:%S', struct)
     db.append(MyNote(id, title, mynote, date.today().strftime("%d/%m/%Y"), stime))
 
 def save(db):
-    namefile = input("введите имя файла")
+    namefile = input("введите имя файла\n")
     f = open(namefile, "w")
     f.write(json.dumps(db, cls=MyNoteEncoder))
     f.close()
 def load(db,flag_need_save):
-    namefile = input("введите имя файла")
+    namefile = input("введите имя файла\n")
     s = ""
     try:
         f = open(namefile, "r")
@@ -79,8 +79,8 @@ def edits(flag_need_save,db):
                     index = i
                     break
             if(flag_exit_mynote):
-                db[index].title = input("Введите заголовок")
-                db[index].mynote = input("Введите тело заметки")
+                db[index].title = input("Введите заголовок\n")
+                db[index].mynote = input("Введите тело заметки\n")
                 sec = time.time()
                 struct = time.localtime(sec)
                 db[index].time = time.strftime('%H:%M:%S', struct)
@@ -96,10 +96,33 @@ def edits(flag_need_save,db):
         print("база заметок пуста пуста")
 
 
+def finddate(db):
+    while len(db):
+        s = input("введите дату в формате %d/%m/%Y\n")
+        try:
+            datetime.strptime(s, "%d/%m/%Y")
 
+            flag_exit_mynote = False
+            indexlist = []
+            for i in range(len(db)):
+                if (db[i].date == s):
+                    flag_exit_mynote = True
+                    indexlist.append(i)
+
+            if (flag_exit_mynote):
+               for index in indexlist:
+                    print(str(db[index].id) + ":" + db[index].title)
+            else:
+               print("с такой датой записи нет")
+            break
+
+        except:
+            print("не правильный формат даты")
+    if (len(db) == 0):
+        print("база заметок пуста пуста")
 def findid(db):
     while len(db):
-        s = input("введите айди")
+        s = input("введите айди\n")
         if is_number_int(s):
             flag_exit_mynote = False
             index = 0
@@ -110,18 +133,19 @@ def findid(db):
                     break
             if (flag_exit_mynote):
                 print(str(db[index].id) + ":" + db[index].title+"\n"+db[index].note)
-                break
+
             else:
                 print("с таким айди записи нет")
+            break
 
         else:
             print("айди это число")
     if (len(db) == 0):
-        print("база заметок пуста пуста")
+        print("база заметок пуста ")
 
 def remove(flag_need_save, db):
     while len(db):
-        s = input("введите айди")
+        s = input("введите айди\n")
         if is_number_int(s):
             flag_exit_mynote = False
             index = 0
@@ -139,7 +163,7 @@ def remove(flag_need_save, db):
         else:
             print("айди это число")
     if (len(db) == 0):
-        print("база заметок пуста пуста")
+        print("база заметок пуста ")
 
 if __name__ == '__main__':
     db = []
@@ -167,14 +191,17 @@ if __name__ == '__main__':
                     elif numbercomand == 4:
                         edits(file_need_save, db)
                     elif numbercomand == 5:
-                         finddate(db)
+                        finddate(db)
                     elif numbercomand == 6:
                         findid(db)
                     elif numbercomand == 7:
                         remove(flag_need_save,db)
                     elif numbercomand == 8:
-                        for  mynote in db:
-                            print(str(mynote.id)+":"+mynote.title)
+                        if(len(db)):
+                            for  mynote in db:
+                                print(str(mynote.id)+":"+mynote.title)
+                        else:
+                            print("заметок нет")
                     else:#команда выхода
                         flag_exit = True
                 else:
