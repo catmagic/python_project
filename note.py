@@ -6,11 +6,8 @@ class MyNote:
         self.note = note
         self.date = date
         self.time = time
-    def from_json(self, jsonnote):
-        self.id = jsonnote['id']
-        self.title = jsonnote['title']
-        self.note = jsonnote['note']
-        self.date = jsonnote['date']
-        self.time = jsonnote['time']
-    def to_json(self):
-        return json.dump(self)
+class MyNoteEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, MyNote):
+            return {"id": obj.id, "title": obj.title, "note": obj.note, "date": obj.date, "time": obj.time}
+        return json.JSONEncoder.default(self, obj)

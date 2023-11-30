@@ -1,4 +1,6 @@
-from  note import MyNote
+import json
+
+from  note import *
 from datetime import date
 import time
 hellostring="""
@@ -18,20 +20,22 @@ def add_note(db):
     mynote = input("Введите тело заметки")
     sec = time.time()
     struct = time.localtime(sec)
-    stime=time.strftime('%H:%M:%S', struct)
-    db.append(MyNote(id,title,mynote,date.today(),stime))
+    stime = time.strftime('%H:%M:%S', struct)
+    db.append(MyNote(id, title, mynote, date.today().strftime("%d/%m/%Y"), stime))
 
 def save(db):
-    print("файл сохранен")
-    pass
+    namefile = input("введите имя файла")
+    f = open(namefile, "w")
+    f.write(json.dumps(db, cls=MyNoteEncoder))
+    f.close()
 
 def need_save(flag_need_save,db,string):
     while flag_need_save:
         print(string)
-        numbercomand=input()
+        numbercomand = input()
         if is_number_int(numbercomand):
             if int(numbercomand) == 1 or int( numbercomand ) == 2 :
-                flag_need_save=False
+                flag_need_save = False
                 if int(numbercomand) == 1:
                     save(db)
             else:
@@ -63,27 +67,25 @@ if __name__ == '__main__':
                     if numbercomand == 1: #команда загрузить
                         need_save(flag_need_save, db, "Вы хотите загрузить файл,но у вас есть не сохранные изменения.\nсохранить?\n1 да\n2 нет")
                         flag_need_save = False
-                        pass
                     elif numbercomand == 2:
                         save(db)
                         flag_need_save = False
                     elif numbercomand == 3:
                         add_note(db)
-                        print(db[0].time)
                         file_need_save = True
                         pass
-                    elif(numbercomand==4):
+                    elif(numbercomand == 4):
                         file_need_save = True
                         pass
-                    elif(numbercomand==5):
+                    elif numbercomand == 5:
                         pass
-                    elif(numbercomand==6):
+                    elif numbercomand == 6:
                         pass
-                    elif(numbercomand==7):
-                        file_need_save=True
+                    elif numbercomand == 7:
+                        file_need_save = True
                         pass
                     else:#команда выхода
-                        flag_exit=True
+                        flag_exit = True
                 else:
                     print("команды с таким номером нет")
             else:
