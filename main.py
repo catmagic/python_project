@@ -109,7 +109,7 @@ def findid(db):
                     index = i
                     break
             if (flag_exit_mynote):
-                print(str(db[index].id) + ":" + db[index].title+"\n"+db[index].title)
+                print(str(db[index].id) + ":" + db[index].title+"\n"+db[index].note)
                 break
             else:
                 print("с таким айди записи нет")
