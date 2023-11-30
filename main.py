@@ -17,7 +17,8 @@ hellostring="""
 """
 
 def add_note(db):
-    id = len(db)+1
+    maxid = max(db, key=lambda mynote : mynote.id, default=MyNote(0,1,1,1,1)).id
+    id = maxid+1
     title = input("Введите заголовок")
     mynote = input("Введите тело заметки")
     sec = time.time()
@@ -73,17 +74,17 @@ def edits(flag_need_save,db):
             flag_exit_mynote = False
             index = 0
             for i in range(len(db)):
-                if(db[i]["id"] == int(s)):
+                if(db[i].id == int(s)):
                     flag_exit_mynote = True
                     index = i
                     break
             if(flag_exit_mynote):
-                db[index]["title"] = input("Введите заголовок")
-                db[index]["mynote"] = input("Введите тело заметки")
+                db[index].title = input("Введите заголовок")
+                db[index].mynote = input("Введите тело заметки")
                 sec = time.time()
                 struct = time.localtime(sec)
-                db[index]["time"] = time.strftime('%H:%M:%S', struct)
-                db[index]["date"] = date.today().strftime("%d/%m/%Y")
+                db[index].time = time.strftime('%H:%M:%S', struct)
+                db[index].date = date.today().strftime("%d/%m/%Y")
                 break
             else:
                 print("с таким айди записи нет")
@@ -97,18 +98,40 @@ def edits(flag_need_save,db):
 
 
 def findid(db):
-    while len(db)
+    while len(db):
         s = input("введите айди")
         if is_number_int(s):
             flag_exit_mynote = False
             index = 0
             for i in range(len(db)):
-                if (db[i]["id"] == int(s)):
+                if (db[i].id == int(s)):
                     flag_exit_mynote = True
                     index = i
                     break
             if (flag_exit_mynote):
-                print(str(db[index]["id"]) + ":" + db[index]["title"]+"\n"+db[index]["title"])
+                print(str(db[index].id) + ":" + db[index].title+"\n"+db[index].title)
+                break
+            else:
+                print("с таким айди записи нет")
+
+        else:
+            print("айди это число")
+    if (len(db) == 0):
+        print("база заметок пуста пуста")
+
+def remove(flag_need_save, db):
+    while len(db):
+        s = input("введите айди")
+        if is_number_int(s):
+            flag_exit_mynote = False
+            index = 0
+            for i in range(len(db)):
+                if (db[i].id == int(s)):
+                    flag_exit_mynote = True
+                    index = i
+                    break
+            if (flag_exit_mynote):
+                db.pop(index)
                 break
             else:
                 print("с таким айди записи нет")
@@ -148,11 +171,10 @@ if __name__ == '__main__':
                     elif numbercomand == 6:
                         findid(db)
                     elif numbercomand == 7:
-                        file_need_save = True
-                        pass
+                        remove(flag_need_save,db)
                     elif numbercomand == 8:
                         for  mynote in db:
-                            print(str(mynote["id"])+":"+mynote["title"])
+                            print(str(mynote.id)+":"+mynote.title)
                     else:#команда выхода
                         flag_exit = True
                 else:
