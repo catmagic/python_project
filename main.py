@@ -28,7 +28,14 @@ def save(db):
     f = open(namefile, "w")
     f.write(json.dumps(db, cls=MyNoteEncoder))
     f.close()
-
+def load():
+    namefile = input("введите имя файла")
+    f = open(namefile, "r")
+    s=""
+    for line in f:
+        s += line
+    print(json.loads(s))
+    return  json.loads(s)
 def need_save(flag_need_save,db,string):
     while flag_need_save:
         print(string)
@@ -66,6 +73,7 @@ if __name__ == '__main__':
                     flag_correct_numercomand=True
                     if numbercomand == 1: #команда загрузить
                         need_save(flag_need_save, db, "Вы хотите загрузить файл,но у вас есть не сохранные изменения.\nсохранить?\n1 да\n2 нет")
+                        db = load()
                         flag_need_save = False
                     elif numbercomand == 2:
                         save(db)
@@ -74,7 +82,7 @@ if __name__ == '__main__':
                         add_note(db)
                         file_need_save = True
                         pass
-                    elif(numbercomand == 4):
+                    elif numbercomand == 4:
                         file_need_save = True
                         pass
                     elif numbercomand == 5:
